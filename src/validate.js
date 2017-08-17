@@ -46,13 +46,12 @@ import { flatToNested } from '@launchpadlab/lp-utils'
  * //   }
  * // }
  */
+
 export default function validate (constraints) {
   return attributes => {
-    
     // validate the data using Validate JS and our custom format
     const errors = validateJs(attributes, constraints, { format: 'lp' })
-
-    // tranform the errors from a 'flat' structure to a 'nested' structure
+    // transform the errors from a 'flat' structure to a 'nested' structure
     return flatToNested(errors)
   }
 }
@@ -66,13 +65,10 @@ function lpFormat (errors) {
 validateJs.formatters.lp = lpFormat
 
 function stripNamespace (errors, attribute) {
-
-  const exclude = capitalize(attribute
-    .split('.')
-    .slice(0, -1)
-    .map(attr => lowerCase(attr))
-    .join(' ')
-  ) + ' '
-
-  return errors.map(error => capitalize(error.replace(exclude, '')))
+  const namespaces = attribute.split('.').slice(0, -1)
+  // If attr is not namespaced, no need to format
+  if (!namespaces.length) return errors
+  // Otherwise, exclude namespace from formatted error
+  const excludeString = capitalize(namespaces.map(lowerCase).join(' ')) + ' '
+  return errors.map(error => capitalize(error.replace(excludeString, '')))
 }
