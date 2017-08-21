@@ -1,8 +1,10 @@
 import validateJs from 'validate.js'
-import capitalize from 'lodash/capitalize'
-import lowerCase from 'lodash/lowerCase'
-import mapValues from 'lodash/mapValues' // not using fp on purpose
-import { flatToNested } from '@launchpadlab/lp-utils'
+import { 
+  capitalize,
+  lowerCase,
+  mapValues,
+  flatToNested,
+} from './utils'
 
 /**
  * A wrapper around the `validate` function exported from

@@ -11,7 +11,10 @@
     ecmaFeatures:
       experimentalObjectRestSpread: true
       impliedStrict: true
+  plugins:
+    - react
   extends:
     - eslint:recommended
+    - plugin:react/recommended
     - plugin:import/errors
     - plugin:import/warnings

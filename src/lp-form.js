@@ -1,8 +1,7 @@
-import compose from 'lodash/fp/compose'
+import React from 'react'
 import { reduxForm } from 'redux-form'
-import { modifyProps } from '@launchpadlab/lp-utils'
-import createFilterFunction from './create-filter-function'
 import submitWithFilter from './submit-with-filter'
+import { createFilterFunction } from './utils'
 import validate from './validate'
 
 // Initialize a redux-forms controlled form and add additional options:
@@ -13,32 +12,29 @@ import validate from './validate'
 // 5. Validation function
 
 function lpForm (options={}) {
-  return function (WrappedComponent) {
-    return compose(
-      modifyProps((props) => {
-        const config = { ...options, ...props }
-        const {
-          onSubmit,
-          initialValues,
-          submitFilters,
-          initialValuesFilters,
-          constraints={},
-          name,
-          ...rest,
-        } = config
-        const filterSubmitValues = createFilterFunction(submitFilters)
-        const filterInitialValues = createFilterFunction(initialValuesFilters)
-        return {
-          onSubmit: submitWithFilter(onSubmit, filterSubmitValues),
-          initialValues: filterInitialValues(initialValues),
-          validate: validate(constraints),
-          form: name,
-          ...rest,
-        }
-      }),
-      reduxForm({}),
-    )(WrappedComponent)
-  }
+  return Wrapped =>
+    function LpFormWrapper (props) {
+      const config = { ...options, ...props }
+      const {
+        onSubmit,
+        initialValues,
+        submitFilters,
+        initialValuesFilters,
+        constraints={},
+        name,
+        ...rest,
+      } = config
+      const filterSubmitValues = createFilterFunction(submitFilters)
+      const filterInitialValues = createFilterFunction(initialValuesFilters)
+      const WrappedWithForm = reduxForm({
+        onSubmit: submitWithFilter(onSubmit, filterSubmitValues),
+        initialValues: filterInitialValues(initialValues),
+        validate: validate(constraints),
+        form: name,
+        ...rest,
+      })(Wrapped)
+      return <WrappedWithForm { ...props } />
+    }
 }
 
 export default lpForm
