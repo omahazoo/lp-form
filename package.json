@@ -46,7 +46,7 @@
     "rimraf": "^2.5.4"
   },
   "peerDependencies": {
-    "react": "^15.5.0",
+    "react": ">=15.5.0",
     "redux-form": ">=6.0.0"
   },
   "dependencies": {
