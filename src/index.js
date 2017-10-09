@@ -1,2 +1,2 @@
-export { default as lpForm } from './lp-form'
-export { default as validate } from './validate'
+export lpForm from './lp-form'
+export validate from './validate'

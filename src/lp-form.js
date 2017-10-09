@@ -1,39 +1,80 @@
 import React from 'react'
 import { reduxForm } from 'redux-form'
-import { createFilterFunction, submitWithFilter } from './utils'
+import { createFilterFunction, wrapSubmissionPromise, wrapDisplayName } from './utils'
 import validate from './validate'
 
-// Initialize a redux-forms controlled form and add additional options:
-// 1. Submit filters
-// 2. Submission error handling
-// 3. Initial values filters
-// 4. Alias "form" with "name"
-// 5. Validation function
+/**
+ * A wrapper around the `reduxForm` HOC exported from
+ * {@link https://www.npmjs.com/package/redux-form|redux-form} that gives it some extra functionality:
+ *
+ * 1. Makes extra options available for configuring the form
+ * 2. Wraps every rejected `onSubmit` in a `SubmissionError`
+ *
+ * The extra options that can be provided to `lpForm` are as follows:
+ * 
+ * @name lpForm
+ * @type Function
+ * @param {String} name - An alias for `"form"` - a unique identifier for the form. 
+ * @param {Object} initialValuesFilters - An object with an `allow` or `reject` key pointing to an array of attribute names. 
+ * The indicated attributes will be omitted from the form's `initialValues`.
+ * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
+ * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
+ * 
+ * @example
+ *
+ * import { Field } from 'redux-form'
+ * import { lpForm } from 'lp-form'
+ * import { Input, SubmitButton } from 'lp-components'
+ * 
+ * function MyForm ({ handleSubmit }) {
+ *    return (
+ *      <form onSubmit={ handleSubmit }>
+ *        <Field name="name" component={ Input } />
+ *        <SubmitButton> I'll submit the form! </SubmitButton>
+ *      </form>
+ *    )
+ * }
+ * 
+ * export default compose(
+ *    lpForm({
+ *      name: 'my-form',
+ *      initialValuesFilters: { reject: ['id'] },
+ *      constraints: { name: { presence: true } },
+ *    })
+ * )(MyForm)
+ * 
+ */
 
 function lpForm (options={}) {
-  return Wrapped =>
-    function LpFormWrapper (props) {
+  return Wrapped => {
+    function Wrapper (props) {
       const config = { ...options, ...props }
       const {
-        onSubmit,
+        name,
         initialValues,
+        onSubmit,
         submitFilters,
         initialValuesFilters,
         constraints={},
-        name,
         ...rest,
       } = config
-      const filterSubmitValues = createFilterFunction(submitFilters)
       const filterInitialValues = createFilterFunction(initialValuesFilters)
+      const filterSubmitValues = createFilterFunction(submitFilters)
       const WrappedWithForm = reduxForm({
-        onSubmit: submitWithFilter(onSubmit, filterSubmitValues),
-        initialValues: filterInitialValues(initialValues),
-        validate: validate(constraints),
         form: name,
+        initialValues: filterInitialValues(initialValues),
+        onSubmit: (values, ...rest) => {
+          const result = onSubmit(filterSubmitValues(values), ...rest)
+          return wrapSubmissionPromise(result)
+        },
+        validate: validate(constraints),
         ...rest,
       })(Wrapped)
       return <WrappedWithForm { ...props } />
     }
+    Wrapper.displayName = wrapDisplayName(Wrapped, 'lpForm')
+    return Wrapper
+  }
 }
 
 export default lpForm
