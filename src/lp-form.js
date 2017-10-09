@@ -1,7 +1,6 @@
 import React from 'react'
 import { reduxForm } from 'redux-form'
-import submitWithFilter from './submit-with-filter'
-import { createFilterFunction } from './utils'
+import { createFilterFunction, submitWithFilter } from './utils'
 import validate from './validate'
 
 // Initialize a redux-forms controlled form and add additional options:

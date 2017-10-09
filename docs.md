@@ -17,11 +17,12 @@ A wrapper around the `validate` function exported from
     correspond to keys in the data that will be validated. This is a 'flat'
     object in that nested data must be accessed using a string path
     (ex. 'foo.bar') as the key.
+-   `values` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** A nested object containing values to be validated.
 
 **Examples**
 
 ```javascript
-const data = {
+const values = {
   name: 'Foo',
   address: {
     zip: '12'
@@ -38,7 +39,8 @@ const constraints = {
   }
 }
 
-validate(constraints)(data)
+// Function is curried so this call will work
+validate(constraints)(values) 
 
 // {
 //   address: {
@@ -47,6 +49,4 @@ validate(constraints)(data)
 // }
 ```
 
-Returns **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** validate - A function that takes an object of data to be validated
-and returns a 'nested' object containing errors in the format specified by
-Redux Form.
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** errors - A nested object of errors that will be passed to redux form.

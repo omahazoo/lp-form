@@ -1,6 +1,7 @@
 import validateJs from 'validate.js'
 import { 
   capitalize,
+  curry,
   lowerCase,
   mapValues,
   flatToNested,
@@ -16,14 +17,13 @@ import {
  * correspond to keys in the data that will be validated. This is a 'flat'
  * object in that nested data must be accessed using a string path
  * (ex. 'foo.bar') as the key.
+ * @param {Object} values - A nested object containing values to be validated.
  * 
- * @returns {Function} validate - A function that takes an object of data to be validated
- * and returns a 'nested' object containing errors in the format specified by
- * Redux Form.
+ * @returns {Object} errors - A nested object of errors that will be passed to redux form.
  * 
  * @example
  * 
- * const data = {
+ * const values = {
  *   name: 'Foo',
  *   address: {
  *     zip: '12'
@@ -40,7 +40,8 @@ import {
  *   }
  * }
  * 
- * validate(constraints)(data)
+ * // Function is curried so this call will work
+ * validate(constraints)(values) 
  * 
  * // {
  * //   address: {
@@ -49,22 +50,20 @@ import {
  * // }
  */
 
-export default function validate (constraints) {
-  return attributes => {
-    // validate the data using Validate JS and our custom format
-    const errors = validateJs(attributes, constraints, { format: 'lp' })
-    // transform the errors from a 'flat' structure to a 'nested' structure
-    return flatToNested(errors)
-  }
+function validate (constraints, values) {
+  // validate the data using Validate JS and our custom format
+  const errors = validateJs(values, constraints, { format: 'lp' })
+  // transform the errors from a 'flat' structure to a 'nested' structure
+  return flatToNested(errors)
 }
 
-function lpFormat (errors) {
+// Our custom format function strips the namespace from each attribute name
+// E.g. person.profile.firstName -> FirstName
+function formatErrors (errors) {
   return mapValues(validateJs.formatters.grouped(errors), stripNamespace)
 }
 
-// A custom format that replicates the Validate JS default while handling
-// flat string paths.
-validateJs.formatters.lp = lpFormat
+validateJs.formatters.lp = formatErrors
 
 function stripNamespace (errors, attribute) {
   const namespaces = attribute.split('.').slice(0, -1)
@@ -74,3 +73,5 @@ function stripNamespace (errors, attribute) {
   const excludeString = capitalize(namespaces.map(lowerCase).join(' ')) + ' '
   return errors.map(error => capitalize(error.replace(excludeString, '')))
 }
+
+export default curry(validate)
