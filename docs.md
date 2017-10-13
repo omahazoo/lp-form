@@ -2,7 +2,51 @@
 
 ### Table of Contents
 
+-   [lpForm](#lpform)
 -   [validate](#validate)
+
+## lpForm
+
+A wrapper around the `reduxForm` HOC exported from
+[redux-form](https://www.npmjs.com/package/redux-form) that gives it some extra functionality:
+
+1.  Makes extra options available for configuring the form
+2.  Wraps every rejected `onSubmit` in a `SubmissionError`
+
+The extra options that can be provided to `lpForm` are as follows:
+
+**Parameters**
+
+-   `name` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** An alias for `"form"` - a unique identifier for the form.
+-   `initialValuesFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object with an `allow` or `reject` key pointing to an array of attribute names. 
+    The indicated attributes will be omitted from the form's `initialValues`.
+-   `submitFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Another filter object that will be used to filter the form values that are submitted.
+-   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validate](#validate) function.
+
+**Examples**
+
+```javascript
+import { Field } from 'redux-form'
+import { lpForm } from 'lp-form'
+import { Input, SubmitButton } from 'lp-components'
+
+function MyForm ({ handleSubmit }) {
+   return (
+     <form onSubmit={ handleSubmit }>
+       <Field name="name" component={ Input } />
+       <SubmitButton> I'll submit the form! </SubmitButton>
+     </form>
+   )
+}
+
+export default compose(
+   lpForm({
+     name: 'my-form',
+     initialValuesFilters: { reject: ['id'] },
+     constraints: { name: { presence: true } },
+   })
+)(MyForm)
+```
 
 ## validate
 
