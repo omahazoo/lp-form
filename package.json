@@ -9,7 +9,7 @@
     "build:development": "mkdir -p lib && babel src --watch --out-dir lib",
     "clean": "rimraf lib",
     "docs": "documentation build src/index.js -f md -o docs.md",
-    "lint": "eslint src",
+    "lint": "eslint src --max-warnings=0",
     "precommit": "yarn run docs && git add docs.md",
     "prepublish": "yarn run lint && yarn run clean && yarn run build",
     "test": "jest",
