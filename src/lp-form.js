@@ -8,7 +8,7 @@ import validate from './validate'
  * {@link https://www.npmjs.com/package/redux-form|redux-form} that gives it some extra functionality:
  *
  * 1. Makes extra options available for configuring the form
- * 2. Wraps every rejected `onSubmit` in a `SubmissionError`
+ * 2. Wraps every rejected `onSubmit` in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`.
  *
  * The extra options that can be provided to `lpForm` are as follows:
  * 
@@ -47,6 +47,7 @@ import validate from './validate'
 
 function lpForm (options={}) {
   return Wrapped => {
+    const WrappedWithForm = reduxForm()(Wrapped)
     function Wrapper (props) {
       const config = { ...options, ...props }
       const {
@@ -60,7 +61,7 @@ function lpForm (options={}) {
       } = config
       const filterInitialValues = createFilterFunction(initialValuesFilters)
       const filterSubmitValues = createFilterFunction(submitFilters)
-      const WrappedWithForm = reduxForm({
+      const formProps = {
         form: name,
         initialValues: filterInitialValues(initialValues),
         onSubmit: (values, ...rest) => {
@@ -69,8 +70,8 @@ function lpForm (options={}) {
         },
         validate: validate(constraints),
         ...rest,
-      })(Wrapped)
-      return <WrappedWithForm { ...props } />
+      }
+      return <WrappedWithForm {...{ ...props, ...formProps }} />
     }
     Wrapper.displayName = wrapDisplayName(Wrapped, 'lpForm')
     return Wrapper
