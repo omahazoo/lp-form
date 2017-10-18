@@ -1,6 +1,6 @@
 import flatToNested from '../../src/utils/flat-to-nested'
 
-test('flatToNested converts objects correctly', () => {
+test('flatToNested: converts objects correctly', () => {
   
   const obj = {
     foo: 'bar',
@@ -21,4 +21,8 @@ test('flatToNested converts objects correctly', () => {
       ],
     },
   })
+})
+
+test('flatToNested: leaves falsey arguments alone', () => {
+  expect(flatToNested(null)).toEqual(null)
 })
