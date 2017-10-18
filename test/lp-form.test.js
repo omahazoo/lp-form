@@ -45,7 +45,7 @@ test('lpForm: filters submitted values', () => {
 test('lpForm: wraps rejected promises in a SubmissionError', () => {
   expect.assertions(2)
   const ERRORS = [ 'my', 'errors' ]
-  const onSubmit = () => Promise.reject({ response: { errors: ERRORS } })
+  const onSubmit = () => Promise.reject({ errors: ERRORS })
   const Wrapped = () => <div> Hi </div>
   const Form = lpForm({ onSubmit })(Wrapped)
   const wrapper = mount(<Form />)
