@@ -26,7 +26,7 @@ import validate from './validate'
  * The indicated attributes will be omitted from the form's `initialValues`.
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
- * @param {Boolean} submitOnChange - A flag indicating whether the form should submit every time it's changed.
+ * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
  * 
  * @example
  *
@@ -69,7 +69,7 @@ function lpForm (options={}) {
         initialValues,
         onSubmit=defaultOnSubmit,
         onChange=noop,
-        submitOnChange,
+        submitOnChange=false,
         submitFilters,
         initialValuesFilters,
         constraints={},
