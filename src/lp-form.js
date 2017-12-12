@@ -1,6 +1,12 @@
 import React from 'react'
 import { reduxForm } from 'redux-form'
-import { createFilterFunction, wrapSubmissionPromise, wrapDisplayName } from './utils'
+import { 
+  createFilterFunction, 
+  wrapSubmissionPromise, 
+  wrapDisplayName,
+  createSubmittingOnChange,
+  noop,
+} from './utils'
 import validate from './validate'
 
 /**
@@ -54,6 +60,8 @@ function lpForm (options={}) {
         name,
         initialValues,
         onSubmit,
+        onChange=noop,
+        submitOnChange,
         submitFilters,
         initialValuesFilters,
         constraints={},
@@ -68,6 +76,7 @@ function lpForm (options={}) {
           const result = onSubmit(filterSubmitValues(values), ...rest)
           return wrapSubmissionPromise(result)
         },
+        onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
         validate: validate(constraints),
         ...rest,
       }
