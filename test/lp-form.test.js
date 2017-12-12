@@ -57,6 +57,18 @@ test('lpForm: wraps rejected promises in a SubmissionError', () => {
   })
 })
 
+test('lpForm: provides a default onSubmit that submits successfully', () => {
+  expect.assertions(1)
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm()(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+
+  return formConfig.onSubmit(INITIAL_VALUES).then(values => {
+    expect(values).toEqual(INITIAL_VALUES)
+  })
+})
+
 test('lpForm: creates validation function with constraints', () => {
   const constraints = { 'foo': { presence: true } }
   const Wrapped = () => <div> Hi </div>

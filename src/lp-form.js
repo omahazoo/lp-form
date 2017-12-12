@@ -1,6 +1,10 @@
 import React from 'react'
 import { reduxForm } from 'redux-form'
-import { createFilterFunction, wrapSubmissionPromise, wrapDisplayName } from './utils'
+import { 
+  createFilterFunction, 
+  wrapSubmissionPromise, 
+  wrapDisplayName,
+} from './utils'
 import validate from './validate'
 
 /**
@@ -9,6 +13,7 @@ import validate from './validate'
  *
  * 1. Makes extra options available for configuring the form
  * 2. Wraps every rejected `onSubmit` in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`.
+ * 3. Provides a default `onSubmit` function that resolves successfully and logs a warning.
  *
  * The extra options that can be provided to `lpForm` are as follows:
  * 
@@ -45,6 +50,12 @@ import validate from './validate'
  * 
  */
 
+ function defaultOnSubmit (...args) {
+  // eslint-disable-next-line no-console
+  console.warn('WARNING: no onSubmit function specified. Form will submit successfully by default.')
+  return Promise.resolve(...args)
+ }
+
 function lpForm (options={}) {
   return Wrapped => {
     const WrappedWithForm = reduxForm()(Wrapped)
@@ -53,7 +64,7 @@ function lpForm (options={}) {
       const {
         name,
         initialValues,
-        onSubmit,
+        onSubmit=defaultOnSubmit,
         submitFilters,
         initialValuesFilters,
         constraints={},
