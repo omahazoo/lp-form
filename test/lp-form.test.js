@@ -58,16 +58,6 @@ test('lpForm: wraps rejected promises in a SubmissionError', () => {
 })
 
 test('lpForm: creates submitting onChange if submitOnChange is true', () => {
-  const constraints = { 'foo': { presence: true } }
-  const Wrapped = () => <div> Hi </div>
-  const Form = lpForm({ constraints })(Wrapped)
-  const wrapper = mount(<Form />)
-  const formConfig = wrapper.find(Wrapped).props()
-  const errors = formConfig.validate({})
-  expect(errors).toEqual({ foo: [ "Foo can't be blank" ] })
-})
-
-test('lpForm: creates submitting onChange if submitOnChange is true', () => {
   const onChange = jest.fn()
   const submit = jest.fn()
   const Wrapped = () => <div> Hi </div>
@@ -93,6 +83,19 @@ test('lpForm: passes through given onChange if submitOnChange is false', () => {
   const wrapper = mount(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
   expect(formConfig.onChange).toBe(onChange)
+})
+
+test('lpForm: provides a default onSubmit that submits successfully', () => {
+  expect.assertions(1)
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm()(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+
+  return formConfig.onSubmit(INITIAL_VALUES).then(values => {
+    expect(values).toEqual(INITIAL_VALUES)
+  })
+
 })
 
 test('lpForm: creates validation function with constraints', () => {
