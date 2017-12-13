@@ -73,7 +73,7 @@ function lpForm (options={}) {
         submitFilters,
         initialValuesFilters,
         constraints={},
-        ...rest,
+        ...rest
       } = config
       const filterInitialValues = createFilterFunction(initialValuesFilters)
       const filterSubmitValues = createFilterFunction(submitFilters)
@@ -86,7 +86,7 @@ function lpForm (options={}) {
         },
         onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
         validate: validate(constraints),
-        ...rest,
+        ...rest
       }
       return <WrappedWithForm {...{ ...props, ...formProps }} />
     }
