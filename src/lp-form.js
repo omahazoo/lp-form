@@ -4,6 +4,8 @@ import {
   createFilterFunction, 
   wrapSubmissionPromise, 
   wrapDisplayName,
+  createSubmittingOnChange,
+  noop,
 } from './utils'
 import validate from './validate'
 
@@ -24,6 +26,7 @@ import validate from './validate'
  * The indicated attributes will be omitted from the form's `initialValues`.
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
+ * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
  * 
  * @example
  *
@@ -65,6 +68,8 @@ function lpForm (options={}) {
         name,
         initialValues,
         onSubmit=defaultOnSubmit,
+        onChange=noop,
+        submitOnChange=false,
         submitFilters,
         initialValuesFilters,
         constraints={},
@@ -79,6 +84,7 @@ function lpForm (options={}) {
           const result = onSubmit(filterSubmitValues(values), ...rest)
           return wrapSubmissionPromise(result)
         },
+        onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
         validate: validate(constraints),
         ...rest,
       }
