@@ -17,6 +17,7 @@ import {
  * correspond to keys in the data that will be validated. This is a 'flat'
  * object in that nested data must be accessed using a string path
  * (ex. 'foo.bar') as the key.
+ * @param {Object} options - An object to pass in any options specified in validateJS.
  * @param {Object} values - A nested object containing values to be validated.
  * 
  * @returns {Object} errors - A nested object of errors that will be passed to redux form.
@@ -50,9 +51,9 @@ import {
  * // }
  */
 
-function validate (constraints, values) {
+function validate (constraints, options, values) {
   // validate the data using Validate JS and our custom format
-  const errors = validateJs(values, constraints, { format: 'lp' })
+  const errors = validateJs(values, constraints, { format: 'lp', ...options })
   // transform the errors from a 'flat' structure to a 'nested' structure
   return flatToNested(errors)
 }

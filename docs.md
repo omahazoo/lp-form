@@ -62,6 +62,7 @@ A wrapper around the `validate` function exported from
     correspond to keys in the data that will be validated. This is a 'flat'
     object in that nested data must be accessed using a string path
     (ex. 'foo.bar') as the key.
+-   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified in validateJS.
 -   `values` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** A nested object containing values to be validated.
 
 **Examples**
