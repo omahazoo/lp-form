@@ -140,7 +140,7 @@ test('lpForm: can override validate function', () => {
   expect(formConfig.validate).toEqual(null)
 })
 
-test('lpForm: can remove attribute name from error messages using `fullMessages`', () => {
+test('lpForm: can pass in options through `validateOptions`', () => {
   const constraints = { 'foo': { presence: true } }
   const Wrapped = () => <div> Hi </div>
   const Form = lpForm({ constraints, validateOptions: { fullMessages: false }})(Wrapped)
