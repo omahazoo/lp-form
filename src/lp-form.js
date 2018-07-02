@@ -27,7 +27,7 @@ import validate from './validate'
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
- * @param {Boolean=true} fullMessages - A flag indicating whether to prepend error messages with the input name.
+ * @param {Object} validateOptions - An object to pass in any options specified by `validateJS`.
  * 
  * @example
  *
@@ -74,12 +74,11 @@ function lpForm (options={}) {
         submitFilters,
         initialValuesFilters,
         constraints={},
-        fullMessages=true,
+        validateOptions={},
         ...rest
       } = config
       const filterInitialValues = createFilterFunction(initialValuesFilters)
       const filterSubmitValues = createFilterFunction(submitFilters)
-      const validateOptions = { fullMessages }
       const formProps = {
         form: name,
         initialValues: filterInitialValues(initialValues),
