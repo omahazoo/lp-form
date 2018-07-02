@@ -2,6 +2,7 @@
 export { 
   capitalize,
   curry,
+  debounce,
   lowerCase,
   mapValues,
   noop,
