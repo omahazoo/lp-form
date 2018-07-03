@@ -28,7 +28,7 @@ import validate from './validate'
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
- * @param {Integer} debounce - An integer representing the time in milliseconds to wait before submitting the form.
+ * @param {Integer} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
  * 
  * @example
  *
