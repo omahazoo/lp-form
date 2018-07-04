@@ -140,4 +140,14 @@ test('lpForm: can override validate function', () => {
   expect(formConfig.validate).toEqual(null)
 })
 
-
+test('lpForm: calls `beforeSubmit` with form values', () => {
+  const onSubmit = jest.fn()
+  const beforeSubmit = jest.fn(values => ({ ...values, name: 'Rachel' }))
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ onSubmit, beforeSubmit })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  formConfig.onSubmit(INITIAL_VALUES)
+  expect(beforeSubmit).toHaveBeenCalled()
+  expect(onSubmit).toHaveBeenCalledWith({ ...INITIAL_VALUES, name: 'Rachel' })
+})
