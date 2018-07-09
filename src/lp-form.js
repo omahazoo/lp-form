@@ -6,6 +6,7 @@ import {
   wrapSubmissionPromise, 
   wrapDisplayName,
   createSubmittingOnChange,
+  debounce,
   noop,
 } from './utils'
 import validate from './validate'
@@ -29,6 +30,7 @@ import validate from './validate'
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
  * @param {Function} beforeSubmit - A function that will be called with the form values before `onSubmit`.
+ * @param {Integer} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
  * 
  * @example
  *
@@ -76,18 +78,20 @@ function lpForm (options={}) {
         initialValuesFilters,
         constraints={},
         beforeSubmit=identity,
+        debounceSubmit,
         ...rest
       } = config
       const filterInitialValues = createFilterFunction(initialValuesFilters)
       const filterSubmitValues = createFilterFunction(submitFilters)
+      const wrappedOnSubmit = (values, ...rest) => {
+        const filteredValues = filterSubmitValues(values)
+        const result = onSubmit(beforeSubmit(filteredValues), ...rest)
+        return wrapSubmissionPromise(result)
+      }
       const formProps = {
         form: name,
         initialValues: filterInitialValues(initialValues),
-        onSubmit: (values, ...rest) => {
-          const filteredValues = filterSubmitValues(values)
-          const result = onSubmit(beforeSubmit(filteredValues), ...rest)
-          return wrapSubmissionPromise(result)
-        },
+        onSubmit: debounceSubmit ? debounce(wrappedOnSubmit, debounceSubmit) : wrappedOnSubmit,
         onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
         validate: validate(constraints),
         ...rest
