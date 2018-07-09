@@ -1,8 +1,11 @@
 import React from 'react'
-import { lpForm } from '../src'
 import { configure, mount } from 'enzyme'
-import { SubmissionError } from 'redux-form'
 import Adapter from 'enzyme-adapter-react-15'
+import debounce from 'lodash/debounce'
+import { SubmissionError } from 'redux-form'
+import { lpForm } from '../src'
+
+jest.mock('lodash/debounce', () => jest.fn(fn => fn))
 
 configure({ adapter: new Adapter() })
 
@@ -148,4 +151,28 @@ test('lpForm: can pass in options through `validateOptions`', () => {
   const formConfig = wrapper.find(Wrapped).props()
   const errors = formConfig.validate({})
   expect(errors).toEqual({ foo: ["can't be blank"] })
+})
+
+test('lpForm: calls `beforeSubmit` with form values', () => {
+  const onSubmit = jest.fn()
+  const beforeSubmit = jest.fn(values => ({ ...values, name: 'Rachel' }))
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ onSubmit, beforeSubmit })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  formConfig.onSubmit(INITIAL_VALUES)
+  expect(beforeSubmit).toHaveBeenCalled()
+  expect(onSubmit).toHaveBeenCalledWith({ ...INITIAL_VALUES, name: 'Rachel' })
+})
+
+test('lpForm: can debounce onSubmit function', () => {
+  debounce.mockClear()
+  const Wrapped = () => <div> Hi </div>
+  const onSubmit = jest.fn()
+  const Form = lpForm({ debounceSubmit: 200, onSubmit })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  formConfig.onSubmit(INITIAL_VALUES)
+  expect(debounce).toHaveBeenCalledTimes(1)
+  expect(onSubmit).toHaveBeenCalledTimes(1)
 })

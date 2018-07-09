@@ -24,6 +24,8 @@ The extra options that can be provided to `lpForm` are as follows:
 -   `submitFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Another filter object that will be used to filter the form values that are submitted.
 -   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validate](#validate) function.
 -   `validateOptions` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `validateJS`.
+-   `beforeSubmit` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** A function that will be called with the form values before `onSubmit`.
+-   `debounceSubmit` **Integer** An integer representing the time in milliseconds to wait before submitting the form.
 
 **Examples**
 
