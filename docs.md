@@ -23,6 +23,7 @@ The extra options that can be provided to `lpForm` are as follows:
     The indicated attributes will be omitted from the form's `initialValues`.
 -   `submitFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Another filter object that will be used to filter the form values that are submitted.
 -   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validate](#validate) function.
+-   `debounceSubmit` **Integer** An integer representing the time in milliseconds to wait before submitting the form.
 
 **Examples**
 
