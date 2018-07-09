@@ -6,10 +6,6 @@ const VALUES = {
   }
 }
 
-const OPTIONS = {
-  fullMessages: true,
-}
-
 const CONSTRAINTS = {
   name: {
     presence: true
@@ -21,7 +17,7 @@ const CONSTRAINTS = {
 }
 
 test('Validate validates and formats errors correctly', () => {
-  const results = validate(CONSTRAINTS)(OPTIONS)(VALUES)
+  const results = validate(CONSTRAINTS)(VALUES)
   expect(results).toEqual({
     name: ['Name can\'t be blank'],
     address: {
@@ -31,7 +27,7 @@ test('Validate validates and formats errors correctly', () => {
 })
 
 test('Validate is curried', () => {
-  const results1 = validate(CONSTRAINTS)(OPTIONS)(VALUES)
-  const results2 = validate(CONSTRAINTS, OPTIONS, VALUES)
+  const results1 = validate(CONSTRAINTS)(VALUES)
+  const results2 = validate(CONSTRAINTS, VALUES)
   expect(results1).toEqual(results2)
 })

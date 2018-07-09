@@ -1,10 +1,8 @@
 import validateJs from 'validate.js'
 import { 
-  capitalize,
   curry,
-  lowerCase,
-  mapValues,
   flatToNested,
+  formatErrors,
 } from './utils'
 
 /**
@@ -17,7 +15,6 @@ import {
  * correspond to keys in the data that will be validated. This is a 'flat'
  * object in that nested data must be accessed using a string path
  * (ex. 'foo.bar') as the key.
- * @param {Object} options - An object to pass in any options specified by `validateJS`.
  * @param {Object} values - A nested object containing values to be validated.
  * 
  * @returns {Object} errors - A nested object of errors that will be passed to redux form.
@@ -51,28 +48,13 @@ import {
  * // }
  */
 
-function validate (constraints, options, values) {
+function validate (constraints, values) {
   // validate the data using Validate JS and our custom format
-  const errors = validateJs(values, constraints, { format: 'lp', ...options })
+  const errors = validateJs(values, constraints, { format: 'lp' })
   // transform the errors from a 'flat' structure to a 'nested' structure
   return flatToNested(errors)
 }
 
-// Our custom format function strips the namespace from each attribute name
-// E.g. person.profile.firstName -> FirstName
-function formatErrors (errors) {
-  return mapValues(validateJs.formatters.grouped(errors), stripNamespace)
-}
-
 validateJs.formatters.lp = formatErrors
-
-function stripNamespace (errors, attribute) {
-  const namespaces = attribute.split('.').slice(0, -1)
-  // If attr is not namespaced, no need to format
-  if (!namespaces.length) return errors
-  // Otherwise, exclude namespace from formatted error
-  const excludeString = capitalize(namespaces.map(lowerCase).join(' ')) + ' '
-  return errors.map(error => capitalize(error.replace(excludeString, '')))
-}
 
 export default curry(validate)

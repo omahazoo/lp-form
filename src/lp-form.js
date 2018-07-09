@@ -10,6 +10,7 @@ import {
   noop,
 } from './utils'
 import validate from './validate'
+import validateWithOptions from './validate-with-options'
 
 /**
  * A wrapper around the `reduxForm` HOC exported from
@@ -78,7 +79,7 @@ function lpForm (options={}) {
         submitFilters,
         initialValuesFilters,
         constraints={},
-        validateOptions={},
+        validateOptions,
         beforeSubmit=identity,
         debounceSubmit,
         ...rest
@@ -95,7 +96,7 @@ function lpForm (options={}) {
         initialValues: filterInitialValues(initialValues),
         onSubmit: debounceSubmit ? debounce(wrappedOnSubmit, debounceSubmit) : wrappedOnSubmit,
         onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
-        validate: validate(constraints, validateOptions),
+        validate: validateOptions ? values => validateWithOptions(constraints, values, validateOptions) : validate(constraints),
         ...rest
       }
       return <WrappedWithForm {...{ ...props, ...formProps }} />
