@@ -9,7 +9,7 @@ import {
   debounce,
   noop,
 } from './utils'
-import validate from './validate'
+import validateWithOptions from './validate-with-options'
 
 /**
  * A wrapper around the `reduxForm` HOC exported from
@@ -27,8 +27,9 @@ import validate from './validate'
  * @param {Object} initialValuesFilters - An object with an `allow` or `reject` key pointing to an array of attribute names. 
  * The indicated attributes will be omitted from the form's `initialValues`.
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
- * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
+ * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validateWithOptions} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
+ * @param {Object} validationOptions - An object to pass in any options specified by `validateJS`.
  * @param {Function} beforeSubmit - A function that will be called with the form values before `onSubmit`.
  * @param {Integer} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
  * 
@@ -77,6 +78,7 @@ function lpForm (options={}) {
         submitFilters,
         initialValuesFilters,
         constraints={},
+        validationOptions={},
         beforeSubmit=identity,
         debounceSubmit,
         ...rest
@@ -93,7 +95,7 @@ function lpForm (options={}) {
         initialValues: filterInitialValues(initialValues),
         onSubmit: debounceSubmit ? debounce(wrappedOnSubmit, debounceSubmit) : wrappedOnSubmit,
         onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
-        validate: validate(constraints),
+        validate: values => validateWithOptions(constraints, values, validationOptions),
         ...rest
       }
       return <WrappedWithForm {...{ ...props, ...formProps }} />

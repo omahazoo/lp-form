@@ -1,5 +1,8 @@
-import validateWithOptions from './validate-with-options'
-import { curry } from './utils'
+import validateJs from 'validate.js'
+import {
+  formatErrors,
+  flatToNested,
+} from './utils'
 
 /**
  * A wrapper around the `validate` function exported from
@@ -12,6 +15,7 @@ import { curry } from './utils'
  * object in that nested data must be accessed using a string path
  * (ex. 'foo.bar') as the key.
  * @param {Object} values - A nested object containing values to be validated.
+ * @param {Object} options - An object to pass in any options specified by `Validate JS`.
  * 
  * @returns {Object} errors - A nested object of errors that will be passed to redux form.
  * 
@@ -24,6 +28,10 @@ import { curry } from './utils'
  *   }
  * }
  * 
+ * const options = {
+ *   fullMessages: true,
+ * }
+ * 
  * const constraints = {
  *   name: {
  *     presence: true
@@ -34,8 +42,7 @@ import { curry } from './utils'
  *   }
  * }
  * 
- * // Function is curried so this call will work
- * validate(constraints)(values) 
+ * validateWithOptions(constraints, values, options)
  * 
  * // {
  * //   address: {
@@ -44,8 +51,13 @@ import { curry } from './utils'
  * // }
  */
 
-function validate (constraints, values) {
-  return validateWithOptions(constraints, values)
+function validateWithOptions (constraints, values, options={}) {
+  // validate the data using Validate JS and our custom format
+  const errors = validateJs(values, constraints, { format: 'lp', ...options })
+  // transform the errors from a 'flat' structure to a 'nested' structure
+  return flatToNested(errors)
 }
 
-export default curry(validate)
+validateJs.formatters.lp = formatErrors
+
+export default validateWithOptions
