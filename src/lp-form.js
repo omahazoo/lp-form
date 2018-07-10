@@ -27,7 +27,7 @@ import validateWithOptions from './validate-with-options'
  * @param {Object} initialValuesFilters - An object with an `allow` or `reject` key pointing to an array of attribute names. 
  * The indicated attributes will be omitted from the form's `initialValues`.
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
- * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validate} function.
+ * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validateWithOptions} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
  * @param {Object} validateOptions - An object to pass in any options specified by `validateJS`.
  * @param {Function} beforeSubmit - A function that will be called with the form values before `onSubmit`.
