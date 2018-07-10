@@ -67,7 +67,7 @@ A wrapper around the `validate` function exported from
     object in that nested data must be accessed using a string path
     (ex. 'foo.bar') as the key.
 -   `values` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** A nested object containing values to be validated.
--   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `validateJS`. (optional, default `{}`)
+-   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `Validate JS`. (optional, default `{}`)
 
 **Examples**
 
@@ -93,7 +93,7 @@ const constraints = {
   }
 }
 
-validate(constraints, options, values)
+validateWithOptions(constraints, values, options)
 
 // {
 //   address: {
