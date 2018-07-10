@@ -29,7 +29,7 @@ import validateWithOptions from './validate-with-options'
  * @param {Object} submitFilters - Another filter object that will be used to filter the form values that are submitted.
  * @param {Object} constraints - Contraints that will be used to validate the form using the {@link validateWithOptions} function.
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
- * @param {Object} validateOptions - An object to pass in any options specified by `validateJS`.
+ * @param {Object} validationOptions - An object to pass in any options specified by `validateJS`.
  * @param {Function} beforeSubmit - A function that will be called with the form values before `onSubmit`.
  * @param {Integer} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
  * 
@@ -78,7 +78,7 @@ function lpForm (options={}) {
         submitFilters,
         initialValuesFilters,
         constraints={},
-        validateOptions={},
+        validationOptions={},
         beforeSubmit=identity,
         debounceSubmit,
         ...rest
@@ -95,7 +95,7 @@ function lpForm (options={}) {
         initialValues: filterInitialValues(initialValues),
         onSubmit: debounceSubmit ? debounce(wrappedOnSubmit, debounceSubmit) : wrappedOnSubmit,
         onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
-        validate: values => validateWithOptions(constraints, values, validateOptions),
+        validate: values => validateWithOptions(constraints, values, validationOptions),
         ...rest
       }
       return <WrappedWithForm {...{ ...props, ...formProps }} />

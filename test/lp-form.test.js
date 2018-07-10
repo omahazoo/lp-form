@@ -143,10 +143,10 @@ test('lpForm: can override validate function', () => {
   expect(formConfig.validate).toEqual(null)
 })
 
-test('lpForm: can pass in options through `validateOptions`', () => {
+test('lpForm: can pass in options through `validationOptions`', () => {
   const constraints = { 'foo': { presence: true } }
   const Wrapped = () => <div> Hi </div>
-  const Form = lpForm({ constraints, validateOptions: { fullMessages: false }})(Wrapped)
+  const Form = lpForm({ constraints, validationOptions: { fullMessages: false }})(Wrapped)
   const wrapper = mount(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
   const errors = formConfig.validate({})
