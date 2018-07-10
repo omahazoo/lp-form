@@ -9,7 +9,6 @@ import {
   debounce,
   noop,
 } from './utils'
-import validate from './validate'
 import validateWithOptions from './validate-with-options'
 
 /**
