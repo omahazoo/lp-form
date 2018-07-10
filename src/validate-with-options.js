@@ -1,4 +1,5 @@
 import validateJs from 'validate.js'
+import validate from './validate'
 import {
   formatErrors,
   flatToNested,

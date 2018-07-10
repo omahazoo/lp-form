@@ -1,9 +1,5 @@
-import validateJs from 'validate.js'
-import { 
-  curry,
-  flatToNested,
-  formatErrors,
-} from './utils'
+import validateWithOptions from './validate-with-options'
+import { curry } from './utils'
 
 /**
  * A wrapper around the `validate` function exported from
@@ -49,12 +45,7 @@ import {
  */
 
 function validate (constraints, values) {
-  // validate the data using Validate JS and our custom format
-  const errors = validateJs(values, constraints, { format: 'lp' })
-  // transform the errors from a 'flat' structure to a 'nested' structure
-  return flatToNested(errors)
+  return validateWithOptions(constraints, values)
 }
-
-validateJs.formatters.lp = formatErrors
 
 export default curry(validate)
