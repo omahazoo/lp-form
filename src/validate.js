@@ -1,9 +1,11 @@
 import validateJs from 'validate.js'
-import { 
+import {
   capitalize,
   curry,
   lowerCase,
   mapValues,
+} from 'lodash'
+import { 
   flatToNested,
 } from './utils'
 

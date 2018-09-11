@@ -80,12 +80,12 @@ test('lpForm: creates submitting onChange if submitOnChange is true', () => {
 })
 
 test('lpForm: passes through given onChange if submitOnChange is false', () => {
-  const onChange = new Function()
+  const onChange = () => 'result'
   const Wrapped = () => <div> Hi </div>
   const Form = lpForm({ onChange })(Wrapped)
   const wrapper = mount(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
-  expect(formConfig.onChange).toBe(onChange)
+  expect(formConfig.onChange()).toBe(onChange())
 })
 
 test('lpForm: provides a default onSubmit that submits successfully', () => {
@@ -137,10 +137,11 @@ test('lpForm: props override config', () => {
 
 test('lpForm: can override validate function', () => {
   const Wrapped = () => <div> Hi </div>
-  const Form = lpForm({ validate: null })(Wrapped)
+  const validate = () => 'result'
+  const Form = lpForm({ validate })(Wrapped)
   const wrapper = mount(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
-  expect(formConfig.validate).toEqual(null)
+  expect(formConfig.validate()).toEqual(validate())
 })
 
 test('lpForm: calls `beforeSubmit` with form values', () => {
