@@ -1,5 +1,5 @@
-import validateWithOptions from './validate-with-options'
-import { curry } from './utils'
+import validateWithOptions from './validateWithOptions'
+import { curry } from 'lodash'
 
 /**
  * A wrapper around the `validate` function exported from

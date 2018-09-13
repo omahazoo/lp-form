@@ -1,15 +1,22 @@
-import React from 'react'
+// import React from 'react'
 import { reduxForm } from 'redux-form'
 import { 
-  createFilterFunction, 
-  identity,
-  wrapSubmissionPromise, 
+  compose,
   wrapDisplayName,
-  createSubmittingOnChange,
-  debounce,
-  noop,
-} from './utils'
-import validateWithOptions from './validate-with-options'
+} from 'recompose'
+import {
+  addBeforeSubmitHook,
+  addDefaultValidate,
+  addDefaultOnSubmit,
+  debounceOnSubmit,
+  filterInitialValues,
+  filterSubmitValues,
+  enableSubmitOnChange,
+  mergeOptionsWithProps,
+  renameFormProp,
+  wrapSubmissionErrors,
+  omitCustomProps,
+} from './middleware'
 
 /**
  * A wrapper around the `reduxForm` HOC exported from
@@ -58,48 +65,23 @@ import validateWithOptions from './validate-with-options'
  * 
  */
 
- function defaultOnSubmit (...args) {
-  // eslint-disable-next-line no-console
-  console.warn('WARNING: no onSubmit function specified. Form will submit successfully by default.')
-  return Promise.resolve(...args)
- }
-
 function lpForm (options={}) {
   return Wrapped => {
-    const WrappedWithForm = reduxForm()(Wrapped)
-    function Wrapper (props) {
-      const config = { ...options, ...props }
-      const {
-        name,
-        initialValues,
-        onSubmit=defaultOnSubmit,
-        onChange=noop,
-        submitOnChange=false,
-        submitFilters,
-        initialValuesFilters,
-        constraints={},
-        validationOptions={},
-        beforeSubmit=identity,
-        debounceSubmit,
-        ...rest
-      } = config
-      const filterInitialValues = createFilterFunction(initialValuesFilters)
-      const filterSubmitValues = createFilterFunction(submitFilters)
-      const wrappedOnSubmit = (values, ...rest) => {
-        const filteredValues = filterSubmitValues(values)
-        const result = onSubmit(beforeSubmit(filteredValues), ...rest)
-        return wrapSubmissionPromise(result)
-      }
-      const formProps = {
-        form: name,
-        initialValues: filterInitialValues(initialValues),
-        onSubmit: debounceSubmit ? debounce(wrappedOnSubmit, debounceSubmit) : wrappedOnSubmit,
-        onChange: submitOnChange ? createSubmittingOnChange(onChange) : onChange,
-        validate: values => validateWithOptions(constraints, values, validationOptions),
-        ...rest
-      }
-      return <WrappedWithForm {...{ ...props, ...formProps }} />
-    }
+    const Wrapper = compose(
+      // Modify props using middleware
+      mergeOptionsWithProps(options),
+      renameFormProp,
+      filterInitialValues,
+      addDefaultOnSubmit,
+      debounceOnSubmit,
+      filterSubmitValues,
+      addBeforeSubmitHook,
+      wrapSubmissionErrors,
+      enableSubmitOnChange,
+      addDefaultValidate,
+      omitCustomProps,
+      reduxForm(),
+    )(Wrapped)
     Wrapper.displayName = wrapDisplayName(Wrapped, 'lpForm')
     return Wrapper
   }

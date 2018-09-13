@@ -1,4 +1,4 @@
-import flatToNested from '../../src/utils/flat-to-nested'
+import { flatToNested } from '../../src/utils'
 
 test('flatToNested: converts objects correctly', () => {
   

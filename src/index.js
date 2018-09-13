@@ -1,3 +1,3 @@
-export lpForm from './lp-form'
-export validateWithOptions from './validate-with-options'
+export lpForm from './lpForm'
+export validateWithOptions from './validateWithOptions'
 export validate from './validate'
