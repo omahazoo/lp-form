@@ -1,2 +1,3 @@
-export createFilterFunction from './create-filter-function'
-export flatToNested from './flat-to-nested'
+export createFilterFunction from './createFilterFunction'
+export flatToNested from './flatToNested'
+export formatErrors from './formatErrors'

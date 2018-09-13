@@ -1,4 +1,4 @@
-import createFilterFunction from '../../src/utils/create-filter-function'
+import { createFilterFunction } from '../../src/utils'
 
 const VALUES = {
   foo: 'foo',

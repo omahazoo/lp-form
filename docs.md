@@ -3,6 +3,7 @@
 ### Table of Contents
 
 -   [lpForm](#lpform)
+-   [validateWithOptions](#validatewithoptions)
 -   [validate](#validate)
 
 ## lpForm
@@ -22,7 +23,8 @@ The extra options that can be provided to `lpForm` are as follows:
 -   `initialValuesFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object with an `allow` or `reject` key pointing to an array of attribute names. 
     The indicated attributes will be omitted from the form's `initialValues`.
 -   `submitFilters` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Another filter object that will be used to filter the form values that are submitted.
--   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validate](#validate) function.
+-   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validateWithOptions](#validatewithoptions) function.
+-   `validationOptions` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `validateJS`.
 -   `beforeSubmit` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** A function that will be called with the form values before `onSubmit`.
 -   `debounceSubmit` **Integer** An integer representing the time in milliseconds to wait before submitting the form.
 
@@ -50,6 +52,57 @@ export default compose(
    })
 )(MyForm)
 ```
+
+## validateWithOptions
+
+A wrapper around the `validate` function exported from
+[Validate JS](https://validatejs.org/) to make it work seamlessly with
+[Redux Form](http://redux-form.com/).
+
+**Parameters**
+
+-   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** A 'flat' object containing constraints in the
+    format specified by Validate JS. These are key-value pairs where the keys
+    correspond to keys in the data that will be validated. This is a 'flat'
+    object in that nested data must be accessed using a string path
+    (ex. 'foo.bar') as the key.
+-   `values` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** A nested object containing values to be validated.
+-   `options` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `Validate JS`. (optional, default `{}`)
+
+**Examples**
+
+```javascript
+const values = {
+  name: 'Foo',
+  address: {
+    zip: '12'
+  }
+}
+
+const options = {
+  fullMessages: true,
+}
+
+const constraints = {
+  name: {
+    presence: true
+  },
+  'address.zip': {
+    presence: true,
+    length: { is: 5 }
+  }
+}
+
+validateWithOptions(constraints, values, options)
+
+// {
+//   address: {
+//     zip: ['Zip is the wrong length (should be 5 characters)']
+//   }
+// }
+```
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** errors - A nested object of errors that will be passed to redux form.
 
 ## validate
 

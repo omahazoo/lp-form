@@ -1,4 +1,4 @@
-export addConstraints from './addConstraints'
+export addDefaultValidate from './addDefaultValidate'
 export addBeforeSubmitHook from './addBeforeSubmitHook'
 export addDefaultOnSubmit from './addDefaultOnSubmit'
 export debounceOnSubmit from './debounceOnSubmit'

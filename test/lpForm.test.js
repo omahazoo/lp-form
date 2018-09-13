@@ -144,6 +144,16 @@ test('lpForm: can override validate function', () => {
   expect(formConfig.validate()).toEqual(validate())
 })
 
+test('lpForm: can pass in options through `validationOptions`', () => {
+  const constraints = { 'foo': { presence: true } }
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ constraints, validationOptions: { fullMessages: false }})(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  const errors = formConfig.validate({})
+  expect(errors).toEqual({ foo: ["can't be blank"] })
+})
+
 test('lpForm: calls `beforeSubmit` with form values', () => {
   const onSubmit = jest.fn()
   const beforeSubmit = jest.fn(values => ({ ...values, name: 'Rachel' }))
