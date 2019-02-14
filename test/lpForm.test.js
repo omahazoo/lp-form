@@ -60,6 +60,27 @@ test('lpForm: wraps rejected promises in a SubmissionError', () => {
   })
 })
 
+test('lpForm: retains information about the originating error during submit', () => {
+  expect.assertions(3)
+  const ERROR = "Invalid authentication"
+  const onSubmit = () => {
+    const error = new Error('unauthorized')
+    error.errors = { message: ERROR }
+    error.status = 401
+    return Promise.reject(error)
+  }
+  const Wrapped = () => <div>Hi</div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  
+  return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
+    expect(e.errors.message).toEqual(ERROR)
+    expect(e.error).toBeInstanceOf(Error)
+    expect(e.error.status).toBe(401)
+  })
+})
+
 test('lpForm: creates submitting onChange if submitOnChange is true', () => {
   const onChange = jest.fn()
   const submit = jest.fn()
