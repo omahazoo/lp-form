@@ -13,7 +13,11 @@ const wrapSubmissionErrors = withPropsOnChange(
         if (!isPromise(result)) return result
         return result.catch(err => {
           const messages = getOr({}, 'errors', err)
-          throw new SubmissionError(messages)
+          const submissionError = new SubmissionError(messages)
+          
+          // retain metadata (e.g., status code) about the error
+          submissionError.error = err
+          throw submissionError
         })
       }
     }
