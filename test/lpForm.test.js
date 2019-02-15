@@ -76,8 +76,8 @@ test('lpForm: retains information about the originating error during submit', ()
   
   return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
     expect(e.errors.message).toEqual(ERROR)
-    expect(e.error).toBeInstanceOf(Error)
-    expect(e.error.status).toBe(401)
+    expect(e.meta.error).toBeInstanceOf(Error)
+    expect(e.meta.error.status).toBe(401)
   })
 })
 
