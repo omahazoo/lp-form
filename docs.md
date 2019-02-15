@@ -12,7 +12,7 @@ A wrapper around the `reduxForm` HOC exported from
 [redux-form](https://www.npmjs.com/package/redux-form) that gives it some extra functionality:
 
 1.  Makes extra options available for configuring the form
-2.  Wraps every rejected `onSubmit` in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`.
+2.  Wraps every rejected `onSubmit` in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`. The original error will be accessible via the `SubmissionError`s `meta.error` property. This enables developers to access useful information regarding the origin of the failure, e.g., HTTP status.
 3.  Provides a default `onSubmit` function that resolves successfully and logs a warning.
 
 The extra options that can be provided to `lpForm` are as follows:
