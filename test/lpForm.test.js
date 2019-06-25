@@ -175,15 +175,17 @@ test('lpForm: can pass in options through `validationOptions`', () => {
   expect(errors).toEqual({ foo: ["can't be blank"] })
 })
 
-test('lpForm: calls `beforeSubmit` with form values', () => {
+test('lpForm: calls `beforeSubmit` with form values and options', () => {
   const onSubmit = jest.fn()
+  const option = 'some option'
+  const prop = 'some prop'
   const beforeSubmit = jest.fn(values => ({ ...values, name: 'Rachel' }))
   const Wrapped = () => <div> Hi </div>
-  const Form = lpForm({ onSubmit, beforeSubmit })(Wrapped)
-  const wrapper = mount(<Form />)
+  const Form = lpForm({ onSubmit, beforeSubmit, option })(Wrapped)
+  const wrapper = mount(<Form prop={ prop } />)
   const formConfig = wrapper.find(Wrapped).props()
   formConfig.onSubmit(INITIAL_VALUES)
-  expect(beforeSubmit).toHaveBeenCalled()
+  expect(beforeSubmit).toHaveBeenCalledWith(INITIAL_VALUES, { option, prop })
   expect(onSubmit).toHaveBeenCalledWith({ ...INITIAL_VALUES, name: 'Rachel' })
 })
 
