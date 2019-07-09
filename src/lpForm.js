@@ -16,6 +16,7 @@ import {
   renameFormProp,
   wrapSubmissionErrors,
   omitCustomProps,
+  ignorePristineOnChange,
 } from './middleware'
 
 /**
@@ -78,6 +79,7 @@ function lpForm (options={}) {
       addBeforeSubmitHook,
       wrapSubmissionErrors,
       enableSubmitOnChange,
+      ignorePristineOnChange,
       addDefaultValidate,
       omitCustomProps,
       reduxForm(),
