@@ -207,7 +207,7 @@ test('lpForm: can debounce onSubmit function', () => {
   expect(onSubmit).toHaveBeenCalledTimes(1)
 })
 
-test('lpForm: will ignore onChange when the form is pristine', () => {
+test('lpForm: will ignore onChange when the form is pristine and untouched', () => {
   const onChange = jest.fn()
   const Wrapped = () => <div> Hi </div>
   const Form = lpForm({ onChange })(Wrapped)
@@ -218,7 +218,7 @@ test('lpForm: will ignore onChange when the form is pristine', () => {
   const onChangeArgs = [
     {},                // Params
     () => {},          // Dispatch
-    { pristine: true } // Props
+    { pristine: true, anyTouched: false } // Props
   ]
   wrappedOnChange(...onChangeArgs)
   expect(onChange).not.toHaveBeenCalled()
