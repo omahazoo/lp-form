@@ -16,6 +16,7 @@ import {
   renameFormProp,
   wrapSubmissionErrors,
   omitCustomProps,
+  ignorePristineOnChange,
 } from './middleware'
 
 /**
@@ -25,6 +26,7 @@ import {
  * 1. Makes extra options available for configuring the form
  * 2. Wraps every rejected `onSubmit` in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`. The original error will be accessible via the `SubmissionError`s `meta.error` property. This enables developers to access useful information regarding the origin of the failure, e.g., HTTP status.
  * 3. Provides a default `onSubmit` function that resolves successfully and logs a warning.
+ * 4. Ignores any `onChange` events that occur on a pristine and untouched form, patching a bug in `redux-form v8`.
  *
  * The extra options that can be provided to `lpForm` are as follows:
  * 
@@ -78,6 +80,7 @@ function lpForm (options={}) {
       addBeforeSubmitHook,
       wrapSubmissionErrors,
       enableSubmitOnChange,
+      ignorePristineOnChange,
       addDefaultValidate,
       omitCustomProps,
       reduxForm(),

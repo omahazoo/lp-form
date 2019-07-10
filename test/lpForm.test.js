@@ -106,7 +106,13 @@ test('lpForm: passes through given onChange if submitOnChange is false', () => {
   const Form = lpForm({ onChange })(Wrapped)
   const wrapper = mount(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
-  expect(formConfig.onChange()).toBe(onChange())
+  // Call new onChange with typical arguments
+  const onChangeArgs = [
+    {},       // Params
+    () => {}, // Dispatch
+    {}        // Props
+  ]
+  expect(formConfig.onChange(...onChangeArgs)).toBe(onChange(...onChangeArgs))
 })
 
 test('lpForm: provides a default onSubmit that submits successfully', () => {
@@ -199,4 +205,21 @@ test('lpForm: can debounce onSubmit function', () => {
   formConfig.onSubmit(INITIAL_VALUES)
   expect(debounce).toHaveBeenCalledTimes(1)
   expect(onSubmit).toHaveBeenCalledTimes(1)
+})
+
+test('lpForm: will ignore onChange when the form is pristine and untouched', () => {
+  const onChange = jest.fn()
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ onChange })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  const wrappedOnChange = formConfig.onChange
+  // Call new onChange with pristine form arguments
+  const onChangeArgs = [
+    {},                // Params
+    () => {},          // Dispatch
+    { pristine: true, anyTouched: false } // Props
+  ]
+  wrappedOnChange(...onChangeArgs)
+  expect(onChange).not.toHaveBeenCalled()
 })
