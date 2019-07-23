@@ -6,6 +6,7 @@ const enableSubmitOnChange = withPropsOnChange(
   ({ onChange }) => {
     return {
       onChange: (params, dispatch, props, ...rest) => {
+        if (!onChange) return
         if (props.pristine && !props.anyTouched) return
         return onChange(params, dispatch, props, ...rest)
       }
