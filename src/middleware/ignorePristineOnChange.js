@@ -4,9 +4,9 @@ import { withPropsOnChange } from 'recompose'
 const ignorePristineOnChange = withPropsOnChange(
   ['onChange'],
   ({ onChange }) => {
+    if (!onChange) return {}
     return {
       onChange: (params, dispatch, props, ...rest) => {
-        if (!onChange) return
         if (props.pristine && !props.anyTouched) return
         return onChange(params, dispatch, props, ...rest)
       }
