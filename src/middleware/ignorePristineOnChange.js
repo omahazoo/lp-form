@@ -1,7 +1,7 @@
 import { withPropsOnChange } from 'recompose'
 
 // Skip onChange function when form is pristine
-const enableSubmitOnChange = withPropsOnChange(
+const ignorePristineOnChange = withPropsOnChange(
   ['onChange'],
   ({ onChange }) => {
     return {
@@ -14,4 +14,4 @@ const enableSubmitOnChange = withPropsOnChange(
   }
 )
 
-export default enableSubmitOnChange
+export default ignorePristineOnChange
