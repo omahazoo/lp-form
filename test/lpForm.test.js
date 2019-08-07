@@ -3,6 +3,7 @@ import { configure, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-15'
 import debounce from 'lodash/debounce'
 import { SubmissionError } from 'redux-form'
+import isPromise from 'is-promise'
 import { lpForm } from '../src'
 
 jest.mock('lodash/debounce', () => jest.fn(fn => fn))
@@ -43,6 +44,20 @@ test('lpForm: filters submitted values', () => {
   const formConfig = wrapper.find(Wrapped).props()
   formConfig.onSubmit(INITIAL_VALUES)
   expect(onSubmit).toHaveBeenCalledWith({ address: { street: 'Shady Lane' }})
+})
+
+test('lpForm: wraps synchronous onSubmits in a promise', () => {
+  const syncResult = 'a synchronous result'
+  const onSubmit = () => syncResult
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mount(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  const result = formConfig.onSubmit(INITIAL_VALUES)
+  expect(isPromise(result)).toBe(true)
+  return result.then(resolvedResult => {
+    expect(resolvedResult).toEqual(syncResult)
+  })
 })
 
 test('lpForm: wraps rejected promises in a SubmissionError', () => {
