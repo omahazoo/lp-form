@@ -40,7 +40,7 @@ import {
  * @param {Boolean=false} submitOnChange - A flag indicating whether the form should submit every time it's changed.
  * @param {Object} validationOptions - An object to pass in any options specified by `validateJS`.
  * @param {Function} beforeSubmit - A function that will be called with the form values before `onSubmit`. The options/props of `lp-form` are provided as the second argument.
- * @param {Integer} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
+ * @param {Number} debounceSubmit - An integer representing the time in milliseconds to wait before submitting the form.
  * 
  * @example
  *

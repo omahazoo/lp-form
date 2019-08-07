@@ -27,7 +27,7 @@ The extra options that can be provided to `lpForm` are as follows:
 -   `constraints` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** Contraints that will be used to validate the form using the [validateWithOptions](#validatewithoptions) function.
 -   `validationOptions` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** An object to pass in any options specified by `validateJS`.
 -   `beforeSubmit` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)** A function that will be called with the form values before `onSubmit`. The options/props of `lp-form` are provided as the second argument.
--   `debounceSubmit` **Integer** An integer representing the time in milliseconds to wait before submitting the form.
+-   `debounceSubmit` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** An integer representing the time in milliseconds to wait before submitting the form.
 
 **Examples**
 
