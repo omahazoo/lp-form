@@ -1,3 +1,12 @@
 {
-  "presets": ["@launchpadlab/babel-preset/react"]
+  "presets": ["@launchpadlab/babel-preset/react"],
+  "plugins": [
+    ["transform-imports", {
+        "redux-form": {
+          // Use CJS import instead of the @launchpadlab/babel-preset default (es)
+          "transform": "redux-form/lib/${member}",
+          "preventFullImport": true
+        }
+    }]
+  ]
 }
