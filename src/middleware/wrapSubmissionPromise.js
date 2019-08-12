@@ -5,7 +5,7 @@ import { getOr } from 'lodash/fp'
 
 // Wrap submission results in a redux-form SubmissionError. 
 // Also ensures that the return value of onSubmit is a promise.
-const wrapSubmissionErrors = withPropsOnChange(
+const wrapSubmissionPromise = withPropsOnChange(
   ['onSubmit'],
   ({ onSubmit }) => {
     return {
@@ -25,4 +25,4 @@ const wrapSubmissionErrors = withPropsOnChange(
   }
 )
 
-export default wrapSubmissionErrors
+export default wrapSubmissionPromise

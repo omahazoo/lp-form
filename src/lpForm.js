@@ -14,7 +14,7 @@ import {
   enableSubmitOnChange,
   mergeOptionsWithProps,
   renameFormProp,
-  wrapSubmissionErrors,
+  wrapSubmissionPromise,
   omitCustomProps,
   ignorePristineOnChange,
 } from './middleware'
@@ -78,7 +78,7 @@ function lpForm (options={}) {
       debounceOnSubmit,
       filterSubmitValues,
       addBeforeSubmitHook,
-      wrapSubmissionErrors,
+      wrapSubmissionPromise,
       enableSubmitOnChange,
       ignorePristineOnChange,
       addDefaultValidate,
