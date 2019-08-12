@@ -3,14 +3,15 @@ import { SubmissionError } from 'redux-form'
 import isPromise from 'is-promise'
 import { getOr } from 'lodash/fp'
 
-// Wrap submission results in a redux-form SubmissionError
-const wrapSubmissionErrors = withPropsOnChange(
+// Wrap submission results in a redux-form SubmissionError. 
+// Also ensures that the return value of onSubmit is a promise.
+const wrapSubmissionPromise = withPropsOnChange(
   ['onSubmit'],
   ({ onSubmit }) => {
     return {
       onSubmit: (...args) => {
         const result = onSubmit(...args)
-        if (!isPromise(result)) return result
+        if (!isPromise(result)) return Promise.resolve(result)
         return result.catch(err => {
           const messages = getOr({}, 'errors', err)
           const submissionError = new SubmissionError(messages)
@@ -24,4 +25,4 @@ const wrapSubmissionErrors = withPropsOnChange(
   }
 )
 
-export default wrapSubmissionErrors
+export default wrapSubmissionPromise
