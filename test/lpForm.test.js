@@ -58,7 +58,7 @@ test('lpForm: wraps synchronous onSubmits in a promise', () => {
   const onSubmit = () => syncResult
   const Wrapped = () => <div> Hi </div>
   const Form = lpForm({ onSubmit })(Wrapped)
-  const wrapper = mount(<Form />)
+  const wrapper = mountWithProvider(<Form />)
   const formConfig = wrapper.find(Wrapped).props()
   const result = formConfig.onSubmit(INITIAL_VALUES)
   expect(isPromise(result)).toBe(true)
