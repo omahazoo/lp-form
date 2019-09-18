@@ -12,17 +12,18 @@ const wrapSubmissionPromise = withPropsOnChange(
       onSubmit: (...args) => {
         const result = onSubmit(...args)
         if (!isPromise(result)) return Promise.resolve(result)
-        return result.catch(mapSubmissionError)
+        return result.catch(wrapSubmissionError)
       }
     }
   }
 )
 
-function mapSubmissionError (error) {
+// Attempts to grab the errors or error message provided and wraps it in a redux-form SubmissionError
+// The original error is stored in the error's `meta` key to retain metadata (e.g., status code)
+function wrapSubmissionError (error) {
   const messages = getErrorMessages(error)
   const submissionError = new SubmissionError(messages)
   
-  // Retain metadata (e.g., status code) about the original error
   submissionError.meta = { error }
   throw submissionError
 }
@@ -34,8 +35,8 @@ function getErrorMessages (err) {
   
   if (messages) return messages
   
-  const _error = get('message', err)
-  return _error ? { _error } : {}
+  const formWideError = get('message', err)
+  return formWideError ? { _error: formWideError } : {}
 }
 
 export default wrapSubmissionPromise
