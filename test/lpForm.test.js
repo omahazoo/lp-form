@@ -103,6 +103,39 @@ test('lpForm: retains information about the originating error during submit', ()
   })
 })
 
+test('lpForm: maps generic error messages to form-wide errors', () => {
+  expect.assertions(1)
+  const ERROR = "Unprocessable Entity"
+  const onSubmit = () => {
+    const error = new Error("Unprocessable Entity")
+    return Promise.reject(error)
+  }
+  const Wrapped = () => <div>Hi</div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mountWithProvider(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  
+  return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
+    expect(e.errors._error).toEqual(ERROR)
+  })
+})
+
+test('lpForm: returns empty errors if an error message cannot be identified', () => {
+  expect.assertions(1)
+  const onSubmit = () => {
+    const error = new Error()
+    return Promise.reject(error)
+  }
+  const Wrapped = () => <div>Hi</div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mountWithProvider(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  
+  return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
+    expect(e.errors).toEqual({})
+  })
+})
+
 test('lpForm: creates submitting onChange if submitOnChange is true', () => {
   const onChange = jest.fn()
   const submit = jest.fn()
