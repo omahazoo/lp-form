@@ -5,6 +5,7 @@ import { configure, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import debounce from 'lodash/debounce'
 import { SubmissionError } from 'redux-form'
+import isPromise from 'is-promise'
 import { lpForm } from '../src'
 
 jest.mock('lodash/debounce', () => jest.fn(fn => fn))
@@ -52,6 +53,20 @@ test('lpForm: filters submitted values', () => {
   expect(onSubmit).toHaveBeenCalledWith({ address: { street: 'Shady Lane' }})
 })
 
+test('lpForm: wraps synchronous onSubmits in a promise', () => {
+  const syncResult = 'a synchronous result'
+  const onSubmit = () => syncResult
+  const Wrapped = () => <div> Hi </div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mountWithProvider(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  const result = formConfig.onSubmit(INITIAL_VALUES)
+  expect(isPromise(result)).toBe(true)
+  return result.then(resolvedResult => {
+    expect(resolvedResult).toEqual(syncResult)
+  })
+})
+
 test('lpForm: wraps rejected promises in a SubmissionError', () => {
   expect.assertions(2)
   const ERRORS = [ 'my', 'errors' ]
@@ -85,6 +100,39 @@ test('lpForm: retains information about the originating error during submit', ()
     expect(e.errors.message).toEqual(ERROR)
     expect(e.meta.error).toBeInstanceOf(Error)
     expect(e.meta.error.status).toBe(401)
+  })
+})
+
+test('lpForm: maps generic error messages to form-wide errors', () => {
+  expect.assertions(1)
+  const ERROR = "Unprocessable Entity"
+  const onSubmit = () => {
+    const error = new Error("Unprocessable Entity")
+    return Promise.reject(error)
+  }
+  const Wrapped = () => <div>Hi</div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mountWithProvider(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  
+  return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
+    expect(e.errors._error).toEqual(ERROR)
+  })
+})
+
+test('lpForm: returns empty errors if an error message cannot be identified', () => {
+  expect.assertions(1)
+  const onSubmit = () => {
+    const error = new Error()
+    return Promise.reject(error)
+  }
+  const Wrapped = () => <div>Hi</div>
+  const Form = lpForm({ onSubmit })(Wrapped)
+  const wrapper = mountWithProvider(<Form />)
+  const formConfig = wrapper.find(Wrapped).props()
+  
+  return formConfig.onSubmit(INITIAL_VALUES).catch(e => {
+    expect(e.errors).toEqual({})
   })
 })
 
