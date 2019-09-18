@@ -24,7 +24,7 @@ import {
  * {@link https://www.npmjs.com/package/redux-form|redux-form} that gives it some extra functionality:
  *
  * 1. Makes extra options available for configuring the form
- * 2. Wraps every `onSubmit` result in a promise. Additionally, wraps rejected `onSubmit` results in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`. The original error will be accessible via the `SubmissionError`s `meta.error` property. This enables developers to access useful information regarding the origin of the failure, e.g., HTTP status.
+ * 2. Wraps every `onSubmit` result in a promise. Additionally, wraps rejected `onSubmit` results in a `SubmissionError`. If the thrown error has an `errors` property, its value will be passed to `SubmissionError`. Else, if the thrown error has a `message` property, this will be passed to a `SubmissionError` as a form-wide error. The original error will be accessible via the `SubmissionError`s `meta.error` property. This enables developers to access useful information regarding the origin of the failure, e.g., HTTP status.
  * 3. Provides a default `onSubmit` function that resolves successfully and logs a warning.
  * 4. Ignores any `onChange` events that occur on a pristine and untouched form, patching a bug in `redux-form v8`.
  *
