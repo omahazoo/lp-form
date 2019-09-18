@@ -1,6 +1,6 @@
 {
   "name": "@launchpadlab/lp-form",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "Extensions for the reduxForm HOC",
   "main": "lib/index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "lib/"
   ],
   "devDependencies": {
-    "@launchpadlab/babel-preset": "^2.1.0",
+    "@launchpadlab/babel-preset": "^2.1.1",
     "@launchpadlab/eslint-config": "^2.2.3",
     "documentation": "^12.1.1",
     "enzyme": "^3.1.0",
@@ -46,6 +46,8 @@
   },
   "peerDependencies": {
     "react": ">=15.5.0",
+    "react-dom": ">=15.5.0",
+    "react-redux": ">=5.0.0",
     "redux-form": ">=6.0.0"
   },
   "dependencies": {
