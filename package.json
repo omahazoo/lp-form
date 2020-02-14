@@ -1,16 +1,15 @@
 {
   "name": "@launchpadlab/lp-form",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Extensions for the reduxForm HOC",
   "main": "lib/index.js",
   "scripts": {
     "start": "yarn run build:development",
     "build": "mkdir -p lib && babel src --out-dir lib --no-comments --minified",
     "build:development": "mkdir -p lib && babel src --watch --out-dir lib",
-    "clean": "rimraf lib",
+    "clean": "rm -rf lib",
     "docs": "documentation build src/index.js -f md -o docs.md",
     "lint": "eslint src --max-warnings=0",
-    "precommit": "yarn run docs && git add docs.md",
     "prepublish": "yarn run lint && yarn run clean && yarn run build",
     "test": "jest",
     "test:coverage": "jest --coverage"
@@ -34,15 +33,14 @@
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.1.0",
-    "husky": "^3.0.3",
-    "jest": "^24.8.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.0",
     "react-test-renderer": "^16.9.0",
     "redux": "^4.0.4",
-    "redux-form": "^8.2.5",
-    "rimraf": "^2.5.4"
+    "redux-form": "^8.2.5"
   },
   "peerDependencies": {
     "react": ">=15.5.0",
@@ -57,5 +55,10 @@
     "lodash": "^4.17.4",
     "recompose": "^0.26.0",
     "validate.js": "^0.11.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run docs && git add docs.md"
+    }
   }
 }
