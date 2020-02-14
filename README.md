@@ -6,6 +6,7 @@ A drop-in replacemement for the [`reduxForm()`](https://redux-form.com/8.3.0/doc
 
 ```jsx
 import React from 'react'
+import { compose } from 'recompose'
 import { Field } from 'redux-form'
 import { lpForm } from 'lp-form'
 import { Input, SubmitButton } from 'lp-components'
@@ -19,11 +20,13 @@ function MyForm({ handleSubmit }) {
   )
 }
 
-export default lpForm({
-  name: 'MyForm',
-  // Constraints is a special option that adds validations to the form.
-  constraints: { name: { presence: true } },
-})(MyForm)
+export default compose(
+  lpForm({
+    name: 'MyForm',
+    // Constraints is a special option that adds validations to the form.
+    constraints: { name: { presence: true } },
+  })
+)(MyForm)
 ```
 
 All available options and enhancements can be found in the [documentation](#documentation).
