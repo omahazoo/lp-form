@@ -1,6 +1,6 @@
 {
   "name": "@launchpadlab/lp-form",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Extensions for the reduxForm HOC",
   "main": "lib/index.js",
   "scripts": {
